@@ -1,0 +1,201 @@
+Server created in nodeJS 
+Using express 
+
+Url to make request:
+    http://localhost:8080/
+
+To run:
+    In command line, in it's folder type
+    node server.js
+    (not sure if it needs to do first "npm init" and 
+    "npm install express sequelize mysql2 body-parser cors --save" 
+    because of the .gitignore that avoid uploading all of the node modules)
+
+TOKEN:
+    the token will be created when login, 
+    the purpose of the token is to validate the user every time there is 
+    a request to the server without having to login again.
+
+    the token will consist of 20 digits, the first 10 digits will be a randomly 
+    generated number, the last 10 fill be the current date and time plus 2 hours
+    Example: 19274937592020112512
+    (random:1927493759 year:2020, month:11, day: 25, hour: 10 + 2 = 12)
+
+    the extra 2 hours will be the buffer that the user has to stay logged, if there 
+    is no activity in the 2 hours, the token will become invalid and will have to 
+    login again.
+    every time there is a request with a token, the server will verify that the token 
+    is valid and if the token have 1 hour or less time left the server will 
+    automatically add one hour to the token. 
+
+Requests:
+(currently not available)
+
+get_events
+    to call: url + /getevents (http://localhost:8080/getevents)
+    (in the body of the request should be the token
+    as a json file. Example:
+        { "token": "12345678912020112511 } 
+    )
+
+    GET request to obtain information of the current events.
+
+    if request provides a token then:
+
+        if token is from superadmin:
+            the server will return json with the status of the requests
+            and all events. Example:
+                {
+                    "status": "success",
+                    "events": [
+                        "event1": {
+                            all info regarding this event.
+                        },
+                        "event2": {
+                            all info regarding this event.
+                        }, ...
+
+                    ]
+                }
+        
+        if token is from admin:
+            the server will return json with the status of the requests
+            and all events specific to this user. Example:
+                {
+                    "status": "success",
+                    "events": [
+                        "event1": {
+                            all info regarding this event.
+                        },
+                        "event2": {
+                            all info regarding this event.
+                        }, ...
+
+                    ]
+                }
+
+    if no token is provided:
+        the server will return json with the status of the request
+        and all events that are publicly available. Example:
+            {
+                "status": "success",
+                "events": [
+                    "event1": {
+                        all info regarding this event.
+                    },
+                    "event2": {
+                        all info regarding this event.
+                    }, ...
+
+                ]
+            }
+
+    fail in request:
+
+        if token is invalid:
+            the server will only  return status. Example:
+                {
+                    "status": "wrong_token"
+                }
+        
+        if there are no event in the database:
+            the server will return status and empty list:
+                {
+                    "status": "no_events",
+                    "events": []
+                }
+    
+
+post_approval:
+    to call: url + /postapproval (http://localhost:8080/postapproval)
+    (in the body of the request should be the token, event_id and action
+    - action will be the status update, can be "approved" or "denied"
+    as a json file. Example:
+        { 
+            "token": 12345678912020112511,
+            "event_id": 12345,
+            "action": "approved"
+        } 
+    )
+
+    POST request to update information about the approval of specified event,
+    this request is only used by superadmin.
+
+    if request successful:
+        the server will return json with the status and the updated info of the event
+        Example for approved:
+        { 
+            "status": "success",
+            "event": {
+                event info
+            }
+        } 
+
+        Example for denied:
+        { 
+            "status": "success"
+        } 
+    
+    fail in request:
+
+        if token is invalid:
+            the server will only  return status. Example:
+                {
+                    "status": "wrong_token"
+                }
+
+        if event_id is invalid:
+            the server will only  return status. Example:
+                {
+                    "status": "wrong_event_id"
+                }
+
+
+post_event:
+    to call: url + /postevent (http://localhost:8080/postevent)
+    (in the body of the request should be the token, event_info
+    - event_info will be all the info of the event to be created.
+    as a json file. Example:
+        { 
+            "token": 12345678912020112511,
+            "event_info": {
+                "name": "example",
+                "location": "111 ucf orlando",
+                "start_date"
+                ...
+            }
+        } 
+    )
+
+    POST request to create an event,
+    this request is only used by admin.
+
+    if request successful:
+        the server will return json with the status
+        Example for approved:
+        { 
+            "status": "success",
+        } 
+    
+    fail in request:
+    (for the moment it will only validate for dates)
+    if the request is successful the event will be put in pending approval from
+    the superadmin
+
+        if token is invalid:
+            the server will only  return status. Example:
+                {
+                    "status": "wrong_token"
+                }
+
+        if start_date is invalid:
+            the server will only  return status. Example:
+                {
+                    "status": "wrong_start_date"
+                }
+        
+        if end_date is invalid:
+            the server will only  return status. Example:
+                {
+                    "status": "wrong_end_date"
+                }
