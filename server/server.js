@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const db = require("./app/models");
 
 const app = express();
+db.sequelize.sync();
 
 var corsOptions = {
   origin: "http://localhost:8081"
