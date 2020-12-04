@@ -23,7 +23,6 @@ router.post('/login', async (req, res) => {
             table_name = 'users';
             user_info_db = await db.one(table_name, req.body.username);
         }
-
         // retrieve user info
         let pass = req.body.password;
         if (user_info_db == undefined) {
@@ -36,9 +35,16 @@ router.post('/login', async (req, res) => {
             res.json({ status: "Wrong user or pass" })
         }
 
-        // create token
-        let token = token_handler.create_token();
-        let db_res = await db.update_token(table_name, user_info_db.UserID, token);
+        // create token and see if unique
+        let token = ''
+        while (true) {
+            token = token_handler.create_token();
+            let temp = await db.uniquetoken(table_name, token);
+            if (temp == undefined) {
+                break;
+            }
+        }
+        let db_res = await db.update_token(table_name, user_info_db.userID, token);
 
         // set payload and return res
         let payload = {
@@ -51,6 +57,47 @@ router.post('/login', async (req, res) => {
         console.log(e);
         res.sendStatus(500);
     }
+});
+
+router.post('/createuser', async (req, res) => {
+    // check if user is not used already
+    table_name = 'users';
+    user_info_db = await db.one(table_name, req.body.username);
+    if (user_info_db != undefined) {
+        res.json({ status: `invalid username` })
+    }
+
+    // create token and see if unique
+    let token = ''
+    while (true) {
+        token = token_handler.create_token();
+        let temp = await db.uniquetoken(table_name, token);
+        if (temp == undefined) {
+            break;
+        }
+    }
+
+    // hash password
+    let pass = bcrypt.hash_pass(req.body.password);
+
+    // create user
+    let user = {
+        'username': req.body.username,
+        'password': pass,
+        'token': token,
+        'isAdmin': 0,
+        'first_name': req.body.first_name,
+        'last_name': req.body.last_name,
+        'email': req.body.email,
+        'phoneNumber': req.body.phoneNumber,
+    }
+    let created = await db.create_user(user);
+    console.log(created);
+    res.json({
+        "status": "success",
+        "token": token
+    });
+
 });
 
 module.exports = router;

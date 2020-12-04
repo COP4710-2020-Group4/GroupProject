@@ -84,3 +84,4 @@ module.exports = {
     update_token
 }
 
+// console.log(create_token());

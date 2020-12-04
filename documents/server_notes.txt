@@ -31,6 +31,7 @@ TOKEN:
 Requests:
 
 (available)
+
 login POST
     to call: url + /login (http://localhost:8080/login)
     (in the body of the request should be the token
@@ -45,6 +46,25 @@ login POST
 	  		  "token": "102477667522020110412" } 
 		if failure:
 			{ status: "Wrong user or pass" }
+			or if there is any error, it will sent an http status of 500 (Internal Server Error)
+
+create user POST
+    to call: url + /createuser (http://localhost:8080/createuser)
+    (in the body of the request should be the token
+    as a json file. Example:
+        { "username": "mau",
+	  "password": "mau",
+ 	  "first_name": "mau",
+	  "last_name": "mau",
+	  "email": "mau@g.com",
+	  "phoneNumber": 7777777777,} 
+    ) IMPORTANT: body has to be -> x-www-form-urlencoded
+	responds:
+		if success:
+			{ "status": "success",
+	  		  "token": "102477667522020110412" } 
+		if failure:
+			{ status: "invalid username" }
 			or if there is any error, it will sent an http status of 500 (Internal Server Error)
 
 
