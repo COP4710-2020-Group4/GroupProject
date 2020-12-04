@@ -8,7 +8,7 @@ To run:
     In command line, in it's folder type
     node server.js
     (not sure if it needs to do first "npm init" and 
-    "npm install express sequelize mysql2 body-parser cors --save" 
+    "npm install express mysql2 bcrypt" 
     because of the .gitignore that avoid uploading all of the node modules)
 
 TOKEN:
@@ -29,6 +29,25 @@ TOKEN:
     automatically add one hour to the token. 
 
 Requests:
+
+(available)
+login POST
+    to call: url + /login (http://localhost:8080/login)
+    (in the body of the request should be the token
+    as a json file. Example:
+        { "username": "mau",
+	  "password": "mau" } 
+    ) IMPORTANT: body has to be -> x-www-form-urlencoded
+	this request handles superadmins, admins, and participants
+	responds:
+		if success:
+			{ "status": "success",
+	  		  "token": "102477667522020110412" } 
+		if failure:
+			{ status: "Wrong user or pass" }
+			or if there is any error, it will sent an http status of 500 (Internal Server Error)
+
+
 (currently not available)
 
 get_events
