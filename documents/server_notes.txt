@@ -8,7 +8,7 @@ To run:
     In command line, in it's folder type
     node server.js
     (not sure if it needs to do first "npm init" and 
-    "npm install express sequelize mysql2 body-parser cors --save" 
+    "npm install express mysql2 bcrypt" 
     because of the .gitignore that avoid uploading all of the node modules)
 
 TOKEN:
@@ -29,173 +29,64 @@ TOKEN:
     automatically add one hour to the token. 
 
 Requests:
-(currently not available)
 
-get_events
-    to call: url + /getevents (http://localhost:8080/getevents)
+(available)
+
+login POST
+    to call: url + /login (http://localhost:8080/login)
     (in the body of the request should be the token
     as a json file. Example:
-        { "token": "12345678912020112511 } 
-    )
+        { "username": "mau",
+	  "password": "mau" } 
+    ) IMPORTANT: body has to be -> x-www-form-urlencoded
+	this request handles superadmins, admins, and participants
+	responds:
+		if success:
+			{ "status": "success",
+	  		  "token": "102477667522020110412" } 
+		if failure:
+			{ status: "Wrong user or pass" }
+			or if there is any error, it will sent an http status of 500 (Internal Server Error)
 
-    GET request to obtain information of the current events.
+create user POST
+    to call: url + /createuser (http://localhost:8080/createuser)
+    (in the body of the request should be the token
+    as a json file. Example:
+        { "username": "mau",
+	  "password": "mau",
+ 	  "first_name": "mau",
+	  "last_name": "mau",
+	  "email": "mau@g.com",
+	  "phoneNumber": 7777777777,} 
+    ) IMPORTANT: body has to be -> x-www-form-urlencoded
+	responds:
+		if success:
+			{ "status": "success",
+	  		  "token": "102477667522020110412" } 
+		if failure:
+			{ status: "invalid username" }
+			or if there is any error, it will sent an http status of 500 (Internal Server Error)
 
-    if request provides a token then:
-
-        if token is from superadmin:
-            the server will return json with the status of the requests
-            and all events. Example:
-                {
-                    "status": "success",
-                    "events": [
-                        "event1": {
-                            all info regarding this event.
-                        },
-                        "event2": {
-                            all info regarding this event.
-                        }, ...
-
-                    ]
-                }
-        
-        if token is from admin:
-            the server will return json with the status of the requests
-            and all events specific to this user. Example:
-                {
-                    "status": "success",
-                    "events": [
-                        "event1": {
-                            all info regarding this event.
-                        },
-                        "event2": {
-                            all info regarding this event.
-                        }, ...
-
-                    ]
-                }
-
-    if no token is provided:
-        the server will return json with the status of the request
-        and all events that are publicly available. Example:
-            {
-                "status": "success",
-                "events": [
-                    "event1": {
-                        all info regarding this event.
-                    },
-                    "event2": {
-                        all info regarding this event.
-                    }, ...
-
-                ]
-            }
-
-    fail in request:
-
-        if token is invalid:
-            the server will only  return status. Example:
-                {
-                    "status": "wrong_token"
-                }
-        
-        if there are no event in the database:
-            the server will return status and empty list:
-                {
-                    "status": "no_events",
-                    "events": []
-                }
-    
-
-post_approval:
-    to call: url + /postapproval (http://localhost:8080/postapproval)
-    (in the body of the request should be the token, event_id and action
-    - action will be the status update, can be "approved" or "denied"
+create event POST
+    to call: url + /createevent (http://localhost:8080/createevent)
+    (in the body of the request should be the token
     as a json file. Example:
         { 
-            "token": 12345678912020112511,
-            "event_id": 12345,
-            "action": "approved"
-        } 
-    )
-
-    POST request to update information about the approval of specified event,
-    this request is only used by superadmin.
-
-    if request successful:
-        the server will return json with the status and the updated info of the event
-        Example for approved:
-        { 
-            "status": "success",
-            "event": {
-                event info
-            }
-        } 
-
-        Example for denied:
-        { 
-            "status": "success"
-        } 
-    
-    fail in request:
-
-        if token is invalid:
-            the server will only  return status. Example:
-                {
-                    "status": "wrong_token"
-                }
-
-        if event_id is invalid:
-            the server will only  return status. Example:
-                {
-                    "status": "wrong_event_id"
-                }
-
-
-post_event:
-    to call: url + /postevent (http://localhost:8080/postevent)
-    (in the body of the request should be the token, event_info
-    - event_info will be all the info of the event to be created.
-    as a json file. Example:
-        { 
-            "token": 12345678912020112511,
-            "event_info": {
-                "name": "example",
-                "location": "111 ucf orlando",
-                "start_date"
-                ...
-            }
-        } 
-    )
-
-    POST request to create an event,
-    this request is only used by admin.
-
-    if request successful:
-        the server will return json with the status
-        Example for approved:
-        { 
-            "status": "success",
-        } 
-    
-    fail in request:
-    (for the moment it will only validate for dates)
-    if the request is successful the event will be put in pending approval from
-    the superadmin
-
-        if token is invalid:
-            the server will only  return status. Example:
-                {
-                    "status": "wrong_token"
-                }
-
-        if start_date is invalid:
-            the server will only  return status. Example:
-                {
-                    "status": "wrong_start_date"
-                }
-        
-        if end_date is invalid:
-            the server will only  return status. Example:
-                {
-                    "status": "wrong_end_date"
-                }
+        "event_name": "concert",
+        "category": "concert",
+        "date": "2020-12-05",
+        "event_description": "some text",
+	"address": "111 some address orlando fl 20209",
+	"location_name": req.body.location_name,
+        "capacity": 100,
+        "location_description": "some other text",
+        "size": 10,
+	} 
+    ) IMPORTANT: body has to be -> x-www-form-urlencoded
+	responds:
+		if success:
+			{ status: "success" } 
+		if failure:
+			{ status: `wrong token` }
+			{ status: `location taken at that date` }
+			or if there is any error, it will sent an http status of 500 (Internal Server Error)
