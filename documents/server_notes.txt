@@ -69,18 +69,15 @@ create user POST
 
 create event POST
     to call: url + /createevent (http://localhost:8080/createevent)
+	this function automatically makes you an admin
     (in the body of the request should be the token
     as a json file. Example:
         { 
-        "event_name": "concert",
+        "name": "concert",
         "category": "concert",
         "date": "2020-12-05",
-        "event_description": "some text",
-	"address": "111 some address orlando fl 20209",
-	"location_name": req.body.location_name,
-        "capacity": 100,
-        "location_description": "some other text",
-        "size": 10,
+        "description": "some text",
+	"address": "111 some address orlando fl 20209"
 	} 
     ) IMPORTANT: body has to be -> x-www-form-urlencoded
 	responds:
