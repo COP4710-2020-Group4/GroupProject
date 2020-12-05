@@ -30,8 +30,8 @@ CREATE TABLE `administers` (
   `isAdmin` tinyint(1) DEFAULT NULL,
   KEY `userID` (`userID`),
   KEY `eventID` (`eventID`),
-  CONSTRAINT `administers_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
-  CONSTRAINT `administers_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`)
+  CONSTRAINT `administers_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `administers_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,8 +59,8 @@ CREATE TABLE `attends` (
   `eventID` int(11) DEFAULT NULL,
   KEY `userID` (`userID`),
   KEY `eventID` (`eventID`),
-  CONSTRAINT `attends_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
-  CONSTRAINT `attends_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`)
+  CONSTRAINT `attends_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `attends_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -70,7 +70,7 @@ CREATE TABLE `attends` (
 
 LOCK TABLES `attends` WRITE;
 /*!40000 ALTER TABLE `attends` DISABLE KEYS */;
-INSERT INTO `attends` VALUES ('example',10,1,1),('Nice event!',10,2,1);
+INSERT INTO `attends` VALUES ('example',10,1,1);
 /*!40000 ALTER TABLE `attends` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,7 +83,7 @@ DROP TABLE IF EXISTS `event`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event` (
   `category` tinytext,
-  `date` date DEFAULT NULL,
+  `date` varchar(10) DEFAULT NULL,
   `eventID` int(11) NOT NULL,
   `description` tinytext,
   PRIMARY KEY (`eventID`)
@@ -96,7 +96,7 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
-INSERT INTO `event` VALUES ('example','2020-12-01',1,'example');
+INSERT INTO `event` VALUES ('example','2020-12-01',1,'example'),('concert','2020-12-03',23155,'another concert');
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,8 +112,8 @@ CREATE TABLE `heldat` (
   `address` varchar(100) DEFAULT NULL,
   KEY `address` (`address`),
   KEY `eventID` (`eventID`),
-  CONSTRAINT `heldat_ibfk_1` FOREIGN KEY (`address`) REFERENCES `location` (`address`),
-  CONSTRAINT `heldat_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`)
+  CONSTRAINT `heldat_ibfk_1` FOREIGN KEY (`address`) REFERENCES `location` (`address`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `heldat_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -123,7 +123,7 @@ CREATE TABLE `heldat` (
 
 LOCK TABLES `heldat` WRITE;
 /*!40000 ALTER TABLE `heldat` DISABLE KEYS */;
-INSERT INTO `heldat` VALUES (1,'12345 example rd, hialeah,florida');
+INSERT INTO `heldat` VALUES (1,'12345 example rd, hialeah,florida'),(23155,'33346 example rd, hialeah,florida');
 /*!40000 ALTER TABLE `heldat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -150,7 +150,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES ('example','12345 example rd, hialeah,florida',200,'example',50);
+INSERT INTO `location` VALUES ('example','12345 example rd, hialeah,florida',200,'example',50),('orlando city','33346 example rd, hialeah,florida',50,'another location',1000);
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,7 +180,7 @@ CREATE TABLE `superadmin` (
 
 LOCK TABLES `superadmin` WRITE;
 /*!40000 ALTER TABLE `superadmin` DISABLE KEYS */;
-INSERT INTO `superadmin` VALUES (1,'mau','$2b$10$QBn4hbhutvsFZi6gUwiUNOjgw9c7rS.AAnVyXc6f7dLyHFgIMdk8a','53858764412020110418',1);
+INSERT INTO `superadmin` VALUES (1,'mau','$2b$10$QBn4hbhutvsFZi6gUwiUNOjgw9c7rS.AAnVyXc6f7dLyHFgIMdk8a','59110487172020110512',1);
 /*!40000 ALTER TABLE `superadmin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -204,7 +204,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`userID`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `UQ_userToken` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +213,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'example','$2b$10$o81A1Qo2yh6x4BMpgsoK.e.x3qOHeyrlAdH6qcMPrz7nalv2G0Rha','80377771532020110418',0,'ex','ample','m@mail.com',7774747777);
+INSERT INTO `users` VALUES (1,'example','$2b$10$o81A1Qo2yh6x4BMpgsoK.e.x3qOHeyrlAdH6qcMPrz7nalv2G0Rha','80377771532020110418',0,'ex','ample','m@mail.com',7774747777),(9,'mau2','$2b$10$qfxWmvNiwElOicyW2vk9.uES3ITukFTMEsy8R2mY.6pDkezh98ua6','66179412352020110512',0,'m','b','m@com',2222222222);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -234,4 +234,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-04 16:36:27
+-- Dump completed on 2020-12-05 11:21:37
