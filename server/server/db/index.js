@@ -25,7 +25,7 @@ let projectdb = {};
 
 projectdb.one = (table, param, variable) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT * FROM ${table} WHERE ${param} = ?`, [variable], (err, results) => {
+        pool.query(`SELECT * FROM ${table} WHERE ${param} = ?;`, [variable], (err, results) => {
             if (err) {
                 return reject(err);
             }
@@ -36,9 +36,7 @@ projectdb.one = (table, param, variable) => {
 
 projectdb.get_event = (variable) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT * 
-            FROM heldat H, event E
-            WHERE E.eventID = H.eventID AND H.address = ?`, [variable], (err, results) => {
+        pool.query(`SELECT * FROM event WHERE address = ?`, [variable], (err, results) => {
             if (err) {
                 return reject(err);
             }
@@ -87,43 +85,26 @@ projectdb.create_event = (e, h, l) => {
     return new Promise((resolve, reject) => {
         // event
         pool.query(`INSERT INTO event 
-        (category, date, eventID, description) 
-        VALUES (?, ?, ?, ?);`,
-            [e.category, e.date, e.eventID, e.description], (err, results) => {
+        (category, date, eventID, description, event_Name, address, userID) 
+        VALUES (?, ?, ?, ?, ?, ?, ?);`,
+            [e.category, e.date, e.eventID, e.description, e.name, e.address, e.userID], (err, results) => {
                 if (err) {
                     return reject(err);
                 }
-                // return resolve(results[0]);
+                return resolve(results);
             });
-
-        // location
-        if (l != {}) {
-            pool.query(`INSERT INTO location 
-            (name, address, capacity, description, size) 
-            VALUES (?, ?, ?, ?, ?);`,
-                [l.name, l.address, l.capacity, l.description, l.size], (err, results) => {
-                    if (err) {
-                        return reject(err);
-                    }
-                    // return resolve(results[0]);
-                });
-        }
-
-        // heldat
-        console.log(h);
-        pool.query(`INSERT INTO heldat 
-        (eventID, address) 
-        VALUES (?, ?);`,
-            [h.eventID, h.address], (err, results) => {
-                if (err) {
-                    return reject(err);
-                }
-                // return resolve(results[0]);
-            });
-
-        return resolve(true);
     });
 };
 
+projectdb.update_to_admin = (id) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`UPDATE users SET isAdmin = 1 WHERE userID = ?;`, [id], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
 
 module.exports = projectdb;

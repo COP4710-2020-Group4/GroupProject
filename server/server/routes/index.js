@@ -4,16 +4,6 @@ const bcrypt = require('../handlers/hash_handler');
 const token_handler = require('../handlers/token_handler');
 const router = express.Router();
 
-// router.get('/events', async (req, res, next) => {
-//     try {
-//         let results = await db.all();
-//         res.json(results);
-//     } catch (e) {
-//         console.log(e);
-//         res.sendStatus(500);
-//     }
-// });
-
 router.post('/login', async (req, res) => {
     try {
         //check if superadmin
@@ -91,16 +81,15 @@ router.post('/createuser', async (req, res) => {
 router.post('/createevent', async (req, res) => {
     // check for valid token
     table_name = 'superadmin';
-    let db_token = await db.unique_token(table_name, req.body.token);
-    if (db_token == undefined) {
+    let db_user = await db.one(table_name, "token", req.body.token);
+    if (db_user == undefined) {
         table_name = 'users';
-        let db_token = await db.unique_token(table_name, req.body.token);
-        if (db_token == undefined) {
+        db_user = await db.one(table_name, "token", req.body.token);
+        if (db_user == undefined) {
             res.json({ status: `wrong token` });
             return
         }
     }
-
     // check for location event
     let loc = await db.get_event(req.body.address);
     if (loc != undefined) {
@@ -117,32 +106,20 @@ router.post('/createevent', async (req, res) => {
     // create payloads
     let event = {
         "eventID": id,
-        "name": req.body.event_name,
+        "name": req.body.name,
         "category": req.body.category,
         "date": req.body.date,
-        "description": req.body.event_description
-    }
-    let heldat = {
-        "eventID": id,
-        "address": req.body.address
+        "description": req.body.description,
+        "address": req.body.address,
+        "userID": db_user.userID
     }
 
-    let location = {}
-    if (loc == undefined) {
-        
-        location = {
-            "name": req.body.location_name,
-            "address": req.body.address,
-            "capacity": req.body.capacity,
-            "description": req.body.location_description,
-            "size": req.body.size,
-        }
-    }
-    console.log(heldat);
 
     //update db
-    let isCreated = db.create_event(event, heldat, location);
+    let isCreated = db.create_event(event);
 
+    // upgrade user to admin
+    let isAdmin = db.update_to_admin(event.userID);
     // respond
     res.json({ status: 'success' });
 
