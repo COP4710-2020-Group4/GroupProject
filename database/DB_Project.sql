@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `db_project` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `db_project`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
 -- Host: localhost    Database: db_project
@@ -16,34 +14,6 @@ USE `db_project`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `administers`
---
-
-DROP TABLE IF EXISTS `administers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `administers` (
-  `userID` int DEFAULT NULL,
-  `eventID` int DEFAULT NULL,
-  `isAdmin` tinyint(1) DEFAULT NULL,
-  KEY `userID` (`userID`),
-  KEY `eventID` (`eventID`),
-  CONSTRAINT `administers_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`),
-  CONSTRAINT `administers_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `administers`
---
-
-LOCK TABLES `administers` WRITE;
-/*!40000 ALTER TABLE `administers` DISABLE KEYS */;
-INSERT INTO `administers` VALUES (1,1,1);
-/*!40000 ALTER TABLE `administers` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `attends`
@@ -83,11 +53,15 @@ DROP TABLE IF EXISTS `event`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event` (
   `category` tinytext,
-  `date` date DEFAULT NULL,
+  `date` varchar(200) DEFAULT NULL,
   `eventID` int NOT NULL,
   `description` tinytext,
   `event_Name` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`eventID`)
+  `address` varchar(100) DEFAULT NULL,
+  `userID` int DEFAULT NULL,
+  PRIMARY KEY (`eventID`),
+  KEY `userID` (`userID`),
+  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -97,62 +71,8 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
-INSERT INTO `event` VALUES ('example','2020-12-01',1,'example',NULL);
+INSERT INTO `event` VALUES ('example','2020-12-01',1,'example','Example Event',NULL,NULL);
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `heldat`
---
-
-DROP TABLE IF EXISTS `heldat`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `heldat` (
-  `eventID` int DEFAULT NULL,
-  `address` varchar(100) DEFAULT NULL,
-  KEY `address` (`address`),
-  KEY `eventID` (`eventID`),
-  CONSTRAINT `heldat_ibfk_1` FOREIGN KEY (`address`) REFERENCES `location` (`address`),
-  CONSTRAINT `heldat_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `event` (`eventID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `heldat`
---
-
-LOCK TABLES `heldat` WRITE;
-/*!40000 ALTER TABLE `heldat` DISABLE KEYS */;
-INSERT INTO `heldat` VALUES (1,'12345 example rd, hialeah,florida');
-/*!40000 ALTER TABLE `heldat` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `location`
---
-
-DROP TABLE IF EXISTS `location`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `location` (
-  `name` varchar(100) DEFAULT NULL,
-  `address` varchar(100) NOT NULL,
-  `capacity` int DEFAULT NULL,
-  `description` varchar(100) DEFAULT NULL,
-  `size` int DEFAULT NULL,
-  PRIMARY KEY (`address`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `location`
---
-
-LOCK TABLES `location` WRITE;
-/*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES ('example','12345 example rd, hialeah,florida',200,'example',50);
-/*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -235,4 +155,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-05  2:21:59
+-- Dump completed on 2020-12-05 15:33:05
