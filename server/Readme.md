@@ -4,8 +4,6 @@ command line:
     
     
     npm i express mysql2 bcrypt
-    
-    
     npm i -D nodemon
 
 to run:
