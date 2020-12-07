@@ -33,7 +33,7 @@ Requests:
 (available)
 
 login POST
-    to call: url + /login (http://localhost:8080/login)
+    to call: url + /api/login (http://localhost:8080/login)
     (in the body of the request should be the token
     as a json file. Example:
         { "username": "mau",
@@ -49,7 +49,7 @@ login POST
 			or if there is any error, it will sent an http status of 500 (Internal Server Error)
 
 create user POST
-    to call: url + /createuser (http://localhost:8080/createuser)
+    to call: url + /api/createuser (http://localhost:8080/createuser)
     (in the body of the request should be the token
     as a json file. Example:
         { "username": "mau",
@@ -68,7 +68,7 @@ create user POST
 			or if there is any error, it will sent an http status of 500 (Internal Server Error)
 
 create event POST
-    to call: url + /createevent (http://localhost:8080/createevent)
+    to call: url + /api/createevent (http://localhost:8080/createevent)
 	this function automatically makes you an admin
     (in the body of the request should be the token
     as a json file. Example:
