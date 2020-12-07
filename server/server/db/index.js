@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const creds = require('./creds.json');
+const creds = require('./../creds');
 
 const pool = mysql.createPool({
     connectionLimit: 10,

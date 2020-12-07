@@ -1,0 +1,16 @@
+[
+    {
+        "user" : "another",
+        "pass" : "example1234",
+        "db_name" : "db_project",
+        "host" : "",
+        "port" : ""
+    },
+    {
+        "user" : "person",
+        "pass" : "example12",
+        "db_name" : "db_project",
+        "host" : "",
+        "port" : ""
+    }
+]
