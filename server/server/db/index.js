@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const creds = require('./../creds');
+const creds = require('../creds');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -12,16 +12,15 @@ const pool = mysql.createPool({
 
 let projectdb = {};
 
-// projectdb.all = () => {
-//     return new Promise((resolve, reject) => {
-//         pool.query(`SELECT * FROM superadmin`, (err, results) => {
-//             if (err) {
-//                 return reject(err);
-//             }
-//             return resolve(results);
-//         });
-//     });
-// };
+projectdb.all = () => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT * FROM superadmin`, (err, results) => {
+            if (err) {
+                return reject(err);             }
+            return resolve(results);
+        });
+     });
+};
 
 projectdb.one = (table, param, variable) => {
     return new Promise((resolve, reject) => {
