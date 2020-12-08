@@ -20,7 +20,7 @@ const login = (event) => {
     .then((res) => {
       if (res.status === "success" && res.token != null) {
         window.localStorage.setItem('token', res.token);
-        window.location.href = "./main.html";
+        window.location.href = "./Exhibition%20Center/index.html";
         return true;
       } else if (res.status === "Wrong user or pass") {
         console.log("error", res.status);

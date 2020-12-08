@@ -31,7 +31,7 @@ const submitForm = (event) => {
       if (res.status === "success" && res.token !== undefined) {
         alert('user created successfully');
         window.localStorage.setItem('token', res.token);
-        window.location.href = "./main.html";
+        window.location.href = "./Exhibition%20Center/index.html";
 
       } else if (res.status === "invalid username") {
         console.log("error", res.status);
