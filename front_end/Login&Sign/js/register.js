@@ -11,12 +11,12 @@ const myForm = document.getElementById("registration-form")
 const submitForm = (event)=> {
      event.preventDefault()
 
- fetch(`${url}/createuser`, {
+ fetch(`${url}/api/createuser`, {
    // mode: "no-cors",
    method: "POST",
    headers: {
      Accept: "application/json, text/plain, */*",
-     "content-type": "application/json",
+     "content-type": "aplication/x-www-form-urlencoded",
    },
    // credentials: "include",
    body: JSON.stringify({

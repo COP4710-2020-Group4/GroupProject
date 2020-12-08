@@ -1,5 +1,5 @@
 
-const email = document.getElementById("emailLogin");
+const username = document.getElementById("userNameLogin");
 const password = document.getElementById("passwordLogin");
 const url = "http://localhost:8080";
 
@@ -8,14 +8,14 @@ const url = "http://localhost:8080";
 const login = (event) => {
   event.preventDefault();
 
-  fetch(`${url}/login`, {
+  fetch(`${url}/api/login`, {
     method: "POST",
     headers: {
       Accept: "application/json, text/plain, */*",
-      "Content-Type": "application/json",
+      "Content-Type": "aplication/x-www-form-urlencoded",
     },
     body: JSON.stringify({
-      email: email.value,
+      username: username.value,
       password: password.value,
     }),
   })
