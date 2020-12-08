@@ -1,8 +1,19 @@
 const express = require('express');
 const db = require('../db');
 const bcrypt = require('../handlers/hash_handler');
+//const bcrypt = require('bcrypt');
 const token_handler = require('../handlers/token_handler');
 const router = express.Router();
+const path = require('path');
+
+router.get('/', function (req, res) {
+    try {
+        res.sendFile(path.join(__dirname + '../../../../front_end/Login&Sign/loginRegister.html'));
+    }
+    catch(e) {
+        console.log(e);
+    }
+});
 
 router.post('/login', async (req, res) => {
     try {
@@ -57,7 +68,7 @@ router.post('/createuser', async (req, res) => {
     let token = await token_creation(table_name);
 
     // hash password
-    let pass = bcrypt.hash_pass(req.body.password);
+    let pass = bcrypt.hash_pass(req.body.password, 10);
 
     // create user
     let user = {
@@ -75,7 +86,6 @@ router.post('/createuser', async (req, res) => {
         "status": "success",
         "token": token
     });
-
 });
 
 router.post('/createevent', async (req, res) => {

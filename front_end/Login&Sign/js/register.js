@@ -1,12 +1,12 @@
 const myForm = document.getElementById("registration-form")
-  const firstname = document.getElementById("firstname");
-  const lastname = document.getElementById("lastname");
-  const email = document.getElementById("email");
-  const username = document.getElementById("username");
-  const mobile = document.getElementById("phone-no");
-  const password = document.getElementById("password");
-  // const confirm_password = document.getElementById('confirm_password')
-  const url = "http://localhost:8080";
+const firstname = document.getElementById("firstname");
+const lastname = document.getElementById("lastname");
+const email = document.getElementById("email");
+const username = document.getElementById("username");
+const mobile = document.getElementById("phone-no");
+const password = document.getElementById("password");
+// const confirm_password = document.getElementById('confirm_password')
+const url = "http://localhost:8080";
 
 const submitForm = (event)=> {
      event.preventDefault()

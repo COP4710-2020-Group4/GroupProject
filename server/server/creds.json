@@ -1,16 +1,8 @@
 [
     {
-        "user" : "another",
-        "pass" : "example1234",
+        "user" : "client",
+        "pass" : "jero1234.",
         "db_name" : "db_project",
-        "host" : "",
-        "port" : ""
-    },
-    {
-        "user" : "person",
-        "pass" : "example12",
-        "db_name" : "db_project",
-        "host" : "",
-        "port" : ""
+        "host" : "localhost"
     }
 ]

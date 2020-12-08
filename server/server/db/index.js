@@ -3,18 +3,67 @@ const creds = require('../creds');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
-    user: creds.user,
-    password: creds.pass,
-    database: creds.db_name,
-    host: creds.host,
-    port: creds.port
+    user: 'client',
+    password: 'jero1234.',
+    database: 'db_project',
+    host: 'localhost'
+});
+
+// Function to test that the server is communicating with the DB
+test = () => {
+    return new Promise((resolve, reject) => {
+         pool.query(`SELECT * FROM superadmin`, (err, results) => {
+            if (err) {
+                return reject(err);             }
+            return resolve(results);
+        });
+     });
+};
+console.log(test());
+
+test().then(function(result) {
+    console.log(result)
 })
+//================================
 
 let projectdb = {};
 
+projectdb.allUsers = () => {
+    return new Promise((resolve, reject) => {
+         pool.query(`SELECT * FROM users`, (err, results) => {
+            if (err) {
+                return reject(err);             
+            }
+            return resolve(results);
+        });
+     });
+};
+
+projectdb.allEvents = () => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT * FROM event`, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
+
+projectdb.del_Event = (variable) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`DELETE * FROM event WHERE eventID = ?;`, [variable], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
+
 projectdb.all = () => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT * FROM superadmin`, (err, results) => {
+         pool.query(`SELECT * FROM superadmin`, (err, results) => {
             if (err) {
                 return reject(err);             }
             return resolve(results);
