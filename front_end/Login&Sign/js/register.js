@@ -26,7 +26,6 @@ const submitForm = (event)=> {
      username: username.value,
      phoneNumber: mobile.value,
      password: password.value,
-     // confirm_password: confirm_password.value
    }),
  })
    .then((res) => res.json())

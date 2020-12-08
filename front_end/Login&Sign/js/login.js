@@ -1,6 +1,6 @@
 
-const username = document.getElementById("userNameLogin");
-const password = document.getElementById("passwordLogin");
+const login-username = document.getElementById("userNameLogin");
+const login-password = document.getElementById("passwordLogin");
 const url = "http://localhost:8080";
 
 
@@ -15,8 +15,8 @@ const login = (event) => {
       "Content-Type": "aplication/x-www-form-urlencoded",
     },
     body: JSON.stringify({
-      username: username.value,
-      password: password.value,
+      username: login-username.value,
+      password: login-password.value,
     }),
   })
     .then((res) => res.json())
