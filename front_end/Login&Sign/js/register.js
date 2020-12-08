@@ -9,14 +9,12 @@ const password = document.getElementById("password");
 const url = "http://localhost:8080";
 
 const submitForm = (event) => {
-  event.preventDefault()
 
   fetch(`${url}/api/createuser`, {
-      // mode: "no-cors",
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
-        "content-type": "aplication/x-www-form-urlencoded",
+        "Content-Type": "application/json",
       },
       // credentials: "include",
       body: JSON.stringify({
@@ -30,19 +28,16 @@ const submitForm = (event) => {
     })
     .then((res) => res.json())
     .then((res) => {
-      if (res.success & res.token) {
-        alert('user created successfully')
-        localstorage.setItem('token', res.token)
-        localStorage.setItem("user", res.data);
+      if (res.status === "success" && res.token !== undefined) {
+        alert('user created successfully');
+        window.localStorage.setItem('token', res.token);
         window.location.href = "./main.html";
+
       } else if (res.status === "invalid username") {
         console.log("error", res.status);
-
+        return false;
       }
     })
     .catch((err) => console.log("error occurred", err));
-
+    return false;
 };
-
-
-myForm.addEventListener("submit", submitForm)
