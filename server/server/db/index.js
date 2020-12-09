@@ -151,7 +151,7 @@ projectdb.user_event = (token) => {
 
 projectdb.user_attend = (id) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT e.event_Name
+        pool.query(`SELECT *
             FROM event e, attends a
             WHERE a.userID = ? AND e.eventID = a.eventID;`, [id], (err, results) => {
             if(err) {
@@ -187,6 +187,22 @@ projectdb.check_superAdmin = (token) => {
             }
             return resolve(results);
         });
+    });
+};
+
+projectdb.isRSVP = (token, eid) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`INSERT INTO attends (userID, eventID)
+                    SELECT u.userID, e.eventID
+                    FROM users u, event e
+                    WHERE u.token = ?
+                    AND e.eventID = ${eid}`, [token], (err, results) => {
+            if(err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    
     });
 };
 

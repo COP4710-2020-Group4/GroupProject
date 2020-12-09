@@ -252,6 +252,28 @@ router.post('/authlevel', async (req, res) => {
 
 });
 
+router.post('/rsvp', async(req, res) => {
+    try {
+        // check for valid token
+        table_name = 'superadmin';
+        let db_user = await db.one(table_name, "token", req.body.token);
+        if (db_user == undefined) {
+            table_name = 'users';
+            db_user = await db.one(table_name, "token", req.body.token);
+            if (db_user == undefined) {
+                res.json({ status: `wrong token` });
+                return
+            }
+        }
+
+        let going = await db.isRSVP(req.body.token, req.body.eventID);
+        res.json(going);
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 
 module.exports = router;
 
