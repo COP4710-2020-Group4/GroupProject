@@ -134,11 +134,11 @@ projectdb.event_Admin = (token) => {
     });
 };
 
-projectdb.user_event = (user) => {
+projectdb.user_event = (token) => {
     return new Promise((resolve, reject) => {
         pool.query(`INSERT INTO attends (userID, eventID)
                     SELECT u.userID, e.eventID
-                    FROM ${user} u, event e
+                    FROM ${token} u, event e
                     WHERE u.token = ?
                     AND u.userID = e.userID;`, [token], (err, results) => {
             if (err) {
@@ -149,10 +149,10 @@ projectdb.user_event = (user) => {
     });
 };
 
-projectdb.user_event = (user, token) => {
+projectdb.user_attend = (token) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT e.event_Name
-                    FROM event e, ${user} u
+                    FROM event e, user u
                     WHERE u.token = ?
                     AND e.userID = u.userID
                     IN (SELECT eventID
@@ -167,10 +167,10 @@ projectdb.user_event = (user, token) => {
     })
 }
 
-projectdb.check_Admin =(user, token) => {
+projectdb.check_Admin =(token) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT * 
-                    FROM ${user} u
+                    FROM user u
                     WHERE u.token = ?
                     AND u.isAdmin = 1;`, [token], (err, resuls) => {
             if (err) {
