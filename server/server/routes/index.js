@@ -94,9 +94,23 @@ router.post('/createevent', async (req, res) => {
     let loc = await db.get_event(req.body.address);
     if (loc != undefined) {
         // check valid time
-        if (req.body.date == loc.date) {
-            res.json({ status: `location taken at that date` });
-            return
+        let s = req.body.start_date
+        let e = req.body.end_date
+        for (let i = 0; i < loc.length; i++) {
+            start = s.substr(0, 4) + s.substr(5, 2) + s.substr(8, 2);
+            end = e.substr(0, 4) + e.substr(5, 2) + e.substr(8, 2);
+            db_start = loc[i].start_date.substr(0, 4) + loc[i].start_date.substr(5, 2) + loc[i].start_date.substr(8, 2);
+            db_end = loc[i].end_date.substr(0, 4) + loc[i].end_date.substr(5, 2) + loc[i].end_date.substr(8, 2);
+            
+            if ((start <= db_start && end>=db_start) || (end >= db_end && start<=db_end) || (start > db_start && end < db_end) || (start < db_start && end > db_end)) {
+                // console.log(start, end, db_start, db_end)
+                res.json({
+                    status: `wrong date`,
+                    occupied_start: loc[i].start_date,
+                    occupied_end: loc[i].end_date
+                });
+                return
+            }
         }
     }
 
@@ -108,7 +122,8 @@ router.post('/createevent', async (req, res) => {
         "eventID": id,
         "name": req.body.name,
         "category": req.body.category,
-        "date": req.body.date,
+        "start_date": req.body.start_date,
+        "end_date": req.body.end_date,
         "description": req.body.description,
         "address": req.body.address,
         "userID": db_user.userID
