@@ -101,8 +101,8 @@ router.post('/createevent', async (req, res) => {
             end = e.substr(0, 4) + e.substr(5, 2) + e.substr(8, 2);
             db_start = loc[i].start_date.substr(0, 4) + loc[i].start_date.substr(5, 2) + loc[i].start_date.substr(8, 2);
             db_end = loc[i].end_date.substr(0, 4) + loc[i].end_date.substr(5, 2) + loc[i].end_date.substr(8, 2);
-            
-            if ((start <= db_start && end>=db_start) || (end >= db_end && start<=db_end) || (start > db_start && end < db_end) || (start < db_start && end > db_end)) {
+
+            if ((start <= db_start && end >= db_start) || (end >= db_end && start <= db_end) || (start > db_start && end < db_end) || (start < db_start && end > db_end)) {
                 // console.log(start, end, db_start, db_end)
                 res.json({
                     status: `wrong date`,
@@ -126,7 +126,8 @@ router.post('/createevent', async (req, res) => {
         "end_date": req.body.end_date,
         "description": req.body.description,
         "address": req.body.address,
-        "userID": db_user.userID
+        "userID": db_user.userID,
+        "url": req.body.url
     }
 
 

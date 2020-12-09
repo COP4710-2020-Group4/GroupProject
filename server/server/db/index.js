@@ -85,9 +85,9 @@ projectdb.create_event = (e, h, l) => {
     return new Promise((resolve, reject) => {
         // event
         pool.query(`INSERT INTO event 
-        (category, start_date, end_date, eventID, description, event_Name, address, userID) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-            [e.category, e.start_date, e.end_date, e.eventID, e.description, e.name, e.address, e.userID], (err, results) => {
+        (category, start_date, end_date, eventID, description, event_Name, address, userID, url) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+            [e.category, e.start_date, e.end_date, e.eventID, e.description, e.name, e.address, e.userID, e.url], (err, results) => {
                 if (err) {
                     return reject(err);
                 }
