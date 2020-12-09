@@ -142,7 +142,33 @@ router.post('/createevent', async (req, res) => {
 
 });
 
+router.get('/getuser', async (req, res) => {
+    try {
+        // check for valid token
+        table_name = 'superadmin';
+        let db_user = await db.one(table_name, "token", req.body.token);
+        if (db_user == undefined) {
+            table_name = 'users';
+            db_user = await db.one(table_name, "token", req.body.token);
+            if (db_user == undefined) {
+                res.json({ status: `wrong token` });
+                return
+            }
+        }
 
+        // set payload and return res
+        let payload = {
+            "status": "success",
+            "first_name": db_user.first_name,
+            "last_name": db_user.last_name
+        }
+        res.json(payload);
+
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
 
 module.exports = router;
 
