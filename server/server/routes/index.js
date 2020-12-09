@@ -217,7 +217,7 @@ router.post('/attend', async (req, res) => {
             }
         }
 
-        let attending = await db.user_attend(req.body.token);
+        let attending = await db.user_attend(db_user.userID);
         res.json(attending);
     } catch (e) {
         console.log(e);
@@ -225,9 +225,10 @@ router.post('/attend', async (req, res) => {
     }
 });
 
-router.post('/authlevel', async (req, rest) => {
+router.post('/authlevel', async (req, res) => {
     // check for valid token
     table_name = 'superadmin';
+    isSuper = false;
     let db_user = await db.one(table_name, "token", req.body.token);
     if (db_user == undefined) {
         table_name = 'users';
@@ -236,36 +237,20 @@ router.post('/authlevel', async (req, rest) => {
             res.json({ status: `wrong token` });
             return
         }
+    } else {
+        res.json({ status: "superadmin" });
+        return;
     }
-    let sup = await db.check_superAdmin(req.body.token);
-    if (sup == undefined) {
-        let adm = await db.check_Admin(req.body.token);
-        if (adm != undefined) {
-            res.json(adm);
-        }
+
+    if (db_user.isAdmin == 1) {
+        res.json({ status: "admin" });
     }
     else {
-        res.json(sup);
-        try {
+        res.json({ status: "user" });
+    }
 
-            let sup = await db.check_superAdmin(req.body.token);
-            if (sup == undefined) {
-                let adm = await db.check_Admin(req.body.token);
-                if (adm == undefined) {
-                    res.json({ status: "user" });
-                }
-                else {
-                    res.json({ status: "admin" });
-                }
-            }
-            else {
-                res.json({ status: "superadmin" });
-            }
-        } catch (e) {
-            console.log(e);
-            res.sendStatus(500);
-        }
-    });
+
+});
 
 
 module.exports = router;

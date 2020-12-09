@@ -121,9 +121,9 @@ projectdb.allEvents = () => {
 
 projectdb.event_Admin = (token) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT * FROM events WHERE userID IN 
+        pool.query(`SELECT * FROM event WHERE userID IN 
                     (SELECT userID 
-                    FROM users, superadmin 
+                    FROM users
                     WHERE token = ? 
                     AND isAdmin = 1);`, [token], (err, results) => {
             if (err) {
@@ -149,15 +149,11 @@ projectdb.user_event = (token) => {
     });
 };
 
-projectdb.user_attend = (token) => {
+projectdb.user_attend = (id) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT e.event_Name
-                    FROM event e, user u
-                    WHERE u.token = ?
-                    AND e.userID = u.userID
-                    IN (SELECT eventID
-                        FROM event e, attends a
-                        WHERE e.eventID = a.eventID;`, [token], (err, results) => {
+            FROM event e, attends a
+            WHERE a.userID = ? AND e.eventID = a.eventID;`, [id], (err, results) => {
             if(err) {
                 return reject(err);
             }
@@ -170,7 +166,7 @@ projectdb.user_attend = (token) => {
 projectdb.check_Admin =(token) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT * 
-                    FROM user u
+                    FROM users u
                     WHERE u.token = ?
                     AND u.isAdmin = 1;`, [token], (err, resuls) => {
             if (err) {
