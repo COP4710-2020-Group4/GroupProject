@@ -31,18 +31,6 @@
 					<li class="nav-item active">
 						<a class="nav-link" href="./createEvent.html">Create Event</a>
 					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Alexander Christopher <i class="fas fa-users-cog"></i>
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="#">Settings</a></li>
-							<li><a class="dropdown-item" href="#">Help</a></li>
-							<li>
-								<hr class="dropdown-divider">
-							</li>
-							<li><a class="dropdown-item" href="#">Sign Out</a></li>
-						</ul>
-					</li>
 				</ul>
 				<form class="form-inline ">
 					<input class="form-control mr-sm-2 w-72" type="search" placeholder="Search" aria-label="Search">
@@ -66,32 +54,26 @@
 	<!-- Exhibtions Section -->
 	<div id="middle-section">
 		<h2 class="exhibitions-header">Exhibitions</h2>
-		<div class="navbar-container">
+		<div class="navbar-container" id="eventGroups">
 			<ul>
 				<li class="nav-link active-link">
 					<h3> <a href="#">Created Events </a></h3>
 					<div class="underline"></div>
+					<event-list v-bind:active_events="created_events"/>
 				</li>
 				<li class="nav-link">
 					<h3><a href="#">Active Events</a></h3>
 					<div class="underline"></div>
-				</li>
-				<li class="nav-link">
-					<h3> <a href="#">Trending Events</a></h3>
-					<div class="underline"></div>
+					<form id="date_selection">
+						<label for="start_date">Event Start Date:</label>
+						<input type="date" id="start_date"/>
+						<label for="end_date">Event End Date:</label>
+						<input type="date" id="end_date"/>
+						<input type="submit" id="date_button" value="Filter" />
+					</form>
+					<event-list v-bind:active_events="active_events"/>
 				</li>
 			</ul>
-		</div>
-		<div class="container-fluid" style="padding-left:100px;">
-			<div class="row" id="eventList">
-				<event-card
-						v-for="item in active_events"
-						v-bind:key="item.id"
-						v-bind:title="item.title"
-						v-bind:description="item.description"
-						v-bind:url="item.url"
-						v-bind:img_src="item.img_src"/>
-			</div>
 		</div>
 	</div>
 	<!-- Footer Section  -->
