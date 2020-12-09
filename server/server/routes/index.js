@@ -171,32 +171,92 @@ router.get('/getuser', async (req, res) => {
 });
 
 router.post('/events', async (req, res) => {
-    let allEvents = await db.allEvents();
-    res.json(allEvents);
+    try {
+        let allEvents = await db.allEvents();
+        res.json(allEvents);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
 });
 
 router.post('/myevents', async (req, res) => {
-    let myEvents = await db.event_Admin(req.body.token);
-    res.json(myEvents)
+    try {
+        // check for valid token
+        table_name = 'superadmin';
+        let db_user = await db.one(table_name, "token", req.body.token);
+        if (db_user == undefined) {
+            table_name = 'users';
+            db_user = await db.one(table_name, "token", req.body.token);
+            if (db_user == undefined) {
+                res.json({ status: `wrong token` });
+                return
+            }
+        }
+
+        let myEvents = await db.event_Admin(req.body.token);
+        res.json(myEvents)
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
 });
 
 router.post('/attend', async (req, res) => {
-    let attending = await db.user_attend(req.body.token);
-    res.json(attending);
+    try {
+        // check for valid token
+        table_name = 'superadmin';
+        let db_user = await db.one(table_name, "token", req.body.token);
+        if (db_user == undefined) {
+            table_name = 'users';
+            db_user = await db.one(table_name, "token", req.body.token);
+            if (db_user == undefined) {
+                res.json({ status: `wrong token` });
+                return
+            }
+        }
+
+        let attending = await db.user_attend(req.body.token);
+        res.json(attending);
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
 });
 
 router.post('/authlevel', async (req, rest) => {
-    let sup = await db.check_superAdmin(req.body.token);
-    if(sup == undefined) {
-        let adm = await db.check_Admin(req.body.token);
-        if(adm != undefined) {
-            res.json(adm);
+    try {
+        // check for valid token
+        table_name = 'superadmin';
+        let db_user = await db.one(table_name, "token", req.body.token);
+        if (db_user == undefined) {
+            table_name = 'users';
+            db_user = await db.one(table_name, "token", req.body.token);
+            if (db_user == undefined) {
+                res.json({ status: `wrong token` });
+                return
+            }
         }
-    }
-    else {
-       res.json(sup);
+
+        let sup = await db.check_superAdmin(req.body.token);
+        if(sup == undefined) {
+            let adm = await db.check_Admin(req.body.token);
+            if(adm == undefined) {
+                res.json({status: "user"});
+            }
+            else {
+                res.json({status: "admin"});
+            }
+        }
+        else {
+        res.json({status: "superadmin"});
+        }
+    } catch(e) {
+        console.log(e);
+        res.sendStatus(500);
     }
 });
+
 
 module.exports = router;
 
