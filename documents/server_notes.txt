@@ -33,7 +33,7 @@ Requests:
 (available)
 
 login POST
-    to call: url + /api/login (http://localhost:8080/login)
+    to call: url + /api/login (http://localhost:8080/api/login)
     (in the body of the request should be the token
     as a json file. Example:
         { "username": "mau",
@@ -49,7 +49,7 @@ login POST
 			or if there is any error, it will sent an http status of 500 (Internal Server Error)
 
 create user POST
-    to call: url + /api/createuser (http://localhost:8080/createuser)
+    to call: url + /api/createuser (http://localhost:8080/api/createuser)
     (in the body of the request should be the token
     as a json file. Example:
         { "username": "mau",
@@ -68,22 +68,27 @@ create user POST
 			or if there is any error, it will sent an http status of 500 (Internal Server Error)
 
 create event POST
-    to call: url + /api/createevent (http://localhost:8080/createevent)
+    to call: url + /api/createevent (http://localhost:8080/api/createevent)
 	this function automatically makes you an admin
     (in the body of the request should be the token
     as a json file. Example:
         { 
         "name": "concert",
         "category": "concert",
-        "date": "2020-12-05",
+        "start_date": "2020-12-05",
+	"end_date": "2020-12-05",
         "description": "some text",
 	"address": "111 some address orlando fl 20209"
 	} 
-    ) IMPORTANT: body has to be -> x-www-form-urlencoded
+    )
 	responds:
 		if success:
 			{ status: "success" } 
 		if failure:
 			{ status: `wrong token` }
-			{ status: `location taken at that date` }
+			{ 
+				"status": "wrong date",
+    				"occupied_start": "2020-12-07",
+    				"occupied_end": "2020-12-08"
+			}
 			or if there is any error, it will sent an http status of 500 (Internal Server Error)
