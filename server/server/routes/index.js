@@ -85,7 +85,7 @@ router.post('/createevent', async (req, res) => {
     if (db_user == undefined) {
         table_name = 'users';
         db_user = await db.one(table_name, "token", req.body.token);
-        if (db_user == undefined) {
+        if (db_user == undefined || token_handler.token_valid(req.body.token)) {
             res.json({ status: `wrong token` });
             return
         }
