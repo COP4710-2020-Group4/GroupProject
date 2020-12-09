@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `db_project` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `db_project`;
--- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
 -- Host: localhost    Database: db_project
 -- ------------------------------------------------------
--- Server version	8.0.18
+-- Server version	8.0.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,9 +26,9 @@ DROP TABLE IF EXISTS `attends`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attends` (
   `comment` tinytext,
-  `rating` int(11) DEFAULT NULL,
-  `userID` int(11) DEFAULT NULL,
-  `eventID` int(11) DEFAULT NULL,
+  `rating` int DEFAULT NULL,
+  `userID` int DEFAULT NULL,
+  `eventID` int DEFAULT NULL,
   KEY `userID` (`userID`),
   KEY `eventID` (`eventID`),
   CONSTRAINT `attends_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -42,7 +42,6 @@ CREATE TABLE `attends` (
 
 LOCK TABLES `attends` WRITE;
 /*!40000 ALTER TABLE `attends` DISABLE KEYS */;
-INSERT INTO `attends` VALUES ('example',10,1,1),('Nice event!',10,2,1);
 /*!40000 ALTER TABLE `attends` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,12 +54,13 @@ DROP TABLE IF EXISTS `event`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event` (
   `category` tinytext,
-  `date` varchar(200) DEFAULT NULL,
-  `eventID` int(11) NOT NULL,
+  `eventID` int NOT NULL,
   `description` tinytext,
   `event_Name` varchar(200) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
-  `userID` int(11) DEFAULT NULL,
+  `userID` int DEFAULT NULL,
+  `start_date` varchar(10) DEFAULT NULL,
+  `end_date` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`eventID`),
   KEY `userID` (`userID`),
   CONSTRAINT `event_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -73,7 +73,6 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
-INSERT INTO `event` VALUES ('example','2020-12-01',1,'example','Example Event',NULL,NULL),('concert','2020-12-03',83227,'another concert','a concert','33346 example rd, hialeah,florida',2),('concert','2020-12-04',95220,'another concert','a concert','33346 example rd, hialeah,florida',3);
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,11 +84,11 @@ DROP TABLE IF EXISTS `superadmin`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `superadmin` (
-  `userID` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `token` varchar(100) DEFAULT NULL,
-  `isAdmin` tinyint(4) DEFAULT NULL,
+  `isAdmin` tinyint DEFAULT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `token_UNIQUE` (`token`),
@@ -115,7 +114,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `userID` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int NOT NULL AUTO_INCREMENT,
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `token` varchar(100) DEFAULT NULL,
@@ -123,7 +122,7 @@ CREATE TABLE `users` (
   `first_name` varchar(100) DEFAULT NULL,
   `last_name` varchar(100) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `phoneNumber` bigint(20) DEFAULT NULL,
+  `phoneNumber` bigint DEFAULT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `UQ_userToken` (`token`)
@@ -157,4 +156,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-07 20:14:57
+-- Dump completed on 2020-12-08 19:01:00
