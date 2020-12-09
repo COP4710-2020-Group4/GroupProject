@@ -35,7 +35,7 @@ function createEvent(event){
         .then((res) => {
             console.log(res);
             if (res.status === "success") {
-                window.location.href = "/Login%26Sign/Exhibition%20Center/index.html";
+                window.location.href = "./index.html";
                 return true;
             } else if (res.status === "wrong date") {
                 console.log("error", res.status);
