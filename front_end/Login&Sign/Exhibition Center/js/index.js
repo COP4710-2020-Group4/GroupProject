@@ -1,9 +1,11 @@
 Vue.component('event-card', {
-    props: ['eventID', 'title', 'description', 'url',  'start-date', 'end-date', 'subscribed', 'func', 'registered'],
+    props: ['eventID', 'title', 'description', 'url',  'start_date', 'end_date', 'subscribed', 'func', 'registered'],
     template: '<div class="card col-lg-3 exhibition-col" style="width: 18px">\n' +
         '          <img src="http://www.fedracongressi.com/fedra/wp-content/uploads/2016/02/revelry-event-designers-homepage-slideshow-38.jpeg" class="card-img-top" alt="...">\n' +
         '          <div class="card-body">\n' +
         '            <h5 class="card-title">{{title}} </h5>\n' +
+        '            <h6 class="card-title">{{start_date}} </h6>\n' +
+        '            <h6 class="card-title">{{end_date}} </h6>\n' +
         '            <p class="card-text">{{description}}</p>\n' +
         '            <a :id="eventID" onclick="handleRegister(this.id)" class="btn btn-primary">{{subscribed}}</a>\n' +
         '          </div>\n' +
