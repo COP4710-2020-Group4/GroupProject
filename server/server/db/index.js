@@ -107,4 +107,91 @@ projectdb.update_to_admin = (id) => {
     });
 };
 
+projectdb.allEvents = () => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT event_Name 
+                    FROM event`, (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
+
+projectdb.event_Admin = (token) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT * FROM events WHERE userID IN 
+                    (SELECT userID 
+                    FROM users, superadmin 
+                    WHERE token = ? 
+                    AND isAdmin = 1);`, [token], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
+
+projectdb.user_event = (user) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`INSERT INTO attends (userID, eventID)
+                    SELECT u.userID, e.eventID
+                    FROM ${user} u, event e
+                    WHERE u.token = ?
+                    AND u.userID = e.userID;`, [token], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
+
+projectdb.user_event = (user, token) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT e.event_Name
+                    FROM event e, ${user} u
+                    WHERE u.token = ?
+                    AND e.userID = u.userID
+                    IN (SELECT eventID
+                        FROM event e, attends a
+                        WHERE e.eventID = a.eventID;`, [token], (err, results) => {
+            if(err) {
+                return reject(err);
+            }
+            return resolve(results);
+                });
+                    
+    })
+}
+
+projectdb.check_Admin =(user, token) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT * 
+                    FROM ${user} u
+                    WHERE u.token = ?
+                    AND u.isAdmin = 1;`, [token], (err, resuls) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
+
+projectdb.check_superAdmin = (token) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT *
+                    FROM superadmin
+                    WHERE token = ?`, [token], (err, results) => {
+            if(err) {
+                return reject(err);
+            }
+            return resolve(results);
+        });
+    });
+};
+
 module.exports = projectdb;
