@@ -61,6 +61,7 @@ CREATE TABLE `event` (
   `userID` int DEFAULT NULL,
   `start_date` varchar(10) DEFAULT NULL,
   `end_date` varchar(10) DEFAULT NULL,
+  `url` tinytext,
   PRIMARY KEY (`eventID`),
   KEY `userID` (`userID`),
   CONSTRAINT `event_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -156,4 +157,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-08 19:01:00
+-- Dump completed on 2020-12-08 20:37:00
