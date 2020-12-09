@@ -134,21 +134,6 @@ projectdb.event_Admin = (token) => {
     });
 };
 
-projectdb.user_event = (token) => {
-    return new Promise((resolve, reject) => {
-        pool.query(`INSERT INTO attends (userID, eventID)
-                    SELECT u.userID, e.eventID
-                    FROM ${token} u, event e
-                    WHERE u.token = ?
-                    AND u.userID = e.userID;`, [token], (err, results) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(results);
-        });
-    });
-};
-
 projectdb.user_attend = (id) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT *

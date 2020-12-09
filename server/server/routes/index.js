@@ -171,7 +171,7 @@ router.get('/getuser', async (req, res) => {
     }
 });
 
-router.post('/events', async (req, res) => {
+router.get('/events', async (req, res) => {
     try {
         let allEvents = await db.allEvents();
         res.json(allEvents);
@@ -181,7 +181,7 @@ router.post('/events', async (req, res) => {
     }
 });
 
-router.post('/myevents', async (req, res) => {
+router.get('/myevents', async (req, res) => {
     try {
         // check for valid token
         table_name = 'superadmin';
@@ -203,7 +203,7 @@ router.post('/myevents', async (req, res) => {
     }
 });
 
-router.post('/attend', async (req, res) => {
+router.get('/attend', async (req, res) => {
     try {
         // check for valid token
         table_name = 'superadmin';
@@ -225,7 +225,7 @@ router.post('/attend', async (req, res) => {
     }
 });
 
-router.post('/authlevel', async (req, res) => {
+router.get('/authlevel', async (req, res) => {
     // check for valid token
     table_name = 'superadmin';
     isSuper = false;
