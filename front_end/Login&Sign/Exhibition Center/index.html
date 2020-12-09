@@ -87,9 +87,9 @@
 				<input type="date" id="end_date"/>
 				<input type="submit" id="date_button" value="Filter" />
 			</form>
-			<event-list v-if="selected === 'active'" id="active_events" :active_events="active_events" :registered_events="registered_events"></event-list>
-			<event-list v-if="selected === 'created'" id="created_events" :active_events="created_events" :registered_events="registered_events"></event-list>
-			<event-list v-if="selected === 'registered'" id="registered_events" :active_events="registered_events" :registered_events="registered_events"></event-list>
+			<event-list v-if="selected === 'active'" id="active_events" :active_events="active_events" :registered_events="registered_eventID"></event-list>
+			<event-list v-if="selected === 'created'" id="created_events" :active_events="created_events" :registered_events="registered_eventID"></event-list>
+			<event-list v-if="selected === 'registered'" id="registered_events" :active_events="registered_events" :registered_events="registered_eventID"></event-list>
 		</div>
 	</div>
 

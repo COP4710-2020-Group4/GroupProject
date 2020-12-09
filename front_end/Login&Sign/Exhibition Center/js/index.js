@@ -1,11 +1,11 @@
 Vue.component('event-card', {
-    props: ['eventID', 'title', 'description', 'url',  'start-date', 'end-date', 'subscribed'],
+    props: ['eventID', 'title', 'description', 'url',  'start-date', 'end-date', 'subscribed', 'func', 'registered'],
     template: '<div class="card col-lg-3 exhibition-col" style="width: 18px">\n' +
         '          <img src="http://www.fedracongressi.com/fedra/wp-content/uploads/2016/02/revelry-event-designers-homepage-slideshow-38.jpeg" class="card-img-top" alt="...">\n' +
         '          <div class="card-body">\n' +
         '            <h5 class="card-title">{{title}} </h5>\n' +
         '            <p class="card-text">{{description}}</p>\n' +
-        '            <a :id="eventID" onclick="rsvp(this.id)" class="btn btn-primary">{{subscribed}}</a>\n' +
+        '            <a :id="eventID" onclick="handleRegister(this.id)" class="btn btn-primary">{{subscribed}}</a>\n' +
         '          </div>\n' +
         '        </div>'
 
@@ -19,12 +19,20 @@ Vue.component('event-list', {
        '\t\t\t\t\t\tv-bind:title="item.event_Name"\n' +
        '\t\t\t\t\t\tv-bind:description="item.description"\n' +
        '\t\t\t\t\t\tv-bind:url="item.url"\n' +
-       '\t\t\t\t\t\tv-bind:subscribed="registered_events.includes(item) ? \'Un-Register\' : \'Register\'"\n' +
+       '\t\t\t\t\t\tv-bind:subscribed="registered_events.includes(item.eventID) ? \'Un-Register\' : \'Register\'"\n' +
        '\t\t\t\t\t\tv-bind:eventID="item.eventID"/>\n' +
        '\t\t\t</div>',
     methods: {
+        handleRegister(eventID) {
+            console.log(this.registered_events);
+            console.log("AAAAAAAAAAAAAAAA");
+            handleRegister(eventID, this.registered_events);
+        },
         rsvp(eventID) {
             rsvp(eventID);
+        },
+        unsub(eventID) {
+           unsub(eventID);
         }
     }
 });
@@ -35,6 +43,7 @@ let eventGroups = new Vue({
         active_events:[],
         created_events:[],
         registered_events:[],
+        registered_eventID:[],
         selected:"active"
     },
     created: function () {
@@ -93,6 +102,9 @@ let eventGroups = new Vue({
                             .then((res) => {
                                 if (res.status === "success") {
                                     this.registered_events = [...new Set(res.attending)];
+                                    this.registered_events.forEach((ev)=>{
+                                       this.registered_eventID.push(ev.eventID);
+                                    });
                                     console.log(this.registered_events);
                                 } else if (res.status === "wrong token") {
                                     console.log("error", res.status);
@@ -159,6 +171,18 @@ function showRegistered() {
     document.getElementById("created").style.textDecoration= 'none';
     document.getElementById("registered").style.textDecoration= 'underline';
 }
+function handleRegister (eventID) {
+    console.log(eventGroups.registered_eventID);
+    console.log(eventGroups.registered_eventID.includes(Number(eventID)));
+    if (!eventGroups.registered_eventID.includes(Number(eventID))) {
+        rsvp(eventID);
+    }
+    else {
+        console.log("Already Registered")
+        unsub(eventID);
+    }
+}
+
 
 function rsvp(eventID) {
     console.log(eventID);
@@ -190,6 +214,36 @@ function rsvp(eventID) {
                 if (!eventGroups.registered_events.includes(newEvent)) {
                     Vue.set(eventGroups.registered_events, eventGroups.registered_events.length, newEvent);
                 }
+                window.location.reload();
+            } else if (res.status === "wrong token") {
+                console.log("error", res.status);
+            }
+
+        })
+        .catch((err) => {
+            console.log("error occurred", err);
+            alert("Error occurred.");
+        });
+}
+function unsub(eventID) {
+    let url = "http://localhost:8080";
+    let options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            token: window.localStorage.getItem("token"),
+            eventID: eventID
+        })
+    };
+    fetch(`${url}/api/deleteattendant`, options)
+        .then((res) => res.json())
+        .then((res) => {
+            if (res.status === "success") {
+                //eventGroups.registered_eventID.remove(eventGroups.registered_eventID.indexOf(eventID));
+                console.log("removed");
+                window.location.reload();
             } else if (res.status === "wrong token") {
                 console.log("error", res.status);
             }
