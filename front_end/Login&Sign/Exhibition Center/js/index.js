@@ -48,6 +48,10 @@ let eventList = new Vue({
                 url:"",
                 img_src: "http://www.fedracongressi.com/fedra/wp-content/uploads/2016/02/revelry-event-designers-homepage-slideshow-38.jpeg"
             },
-        ]
+        ],
+        active_events:[]
+    },
+    created: function () {
+        this.active_events = this.events;
     }
 });
