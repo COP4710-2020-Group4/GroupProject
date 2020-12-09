@@ -34,6 +34,17 @@ projectdb.one = (table, param, variable) => {
     });
 };
 
+projectdb.delete_attendant = (userID, eventID) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`DELETE FROM attends WHERE userID = ? AND eventID = ?;`, [userID, eventID], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results[0]);
+        });
+    });
+};
+
 projectdb.get_event = (variable) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT * FROM event WHERE address = ?`, [variable], (err, results) => {
@@ -139,16 +150,16 @@ projectdb.user_attend = (id) => {
         pool.query(`SELECT *
             FROM event e, attends a
             WHERE a.userID = ? AND e.eventID = a.eventID;`, [id], (err, results) => {
-            if(err) {
+            if (err) {
                 return reject(err);
             }
             return resolve(results);
-                });
-                    
+        });
+
     })
 }
 
-projectdb.check_Admin =(token) => {
+projectdb.check_Admin = (token) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT * 
                     FROM users u
@@ -167,7 +178,7 @@ projectdb.check_superAdmin = (token) => {
         pool.query(`SELECT *
                     FROM superadmin
                     WHERE token = ?`, [token], (err, results) => {
-            if(err) {
+            if (err) {
                 return reject(err);
             }
             return resolve(results);
@@ -182,12 +193,12 @@ projectdb.isRSVP = (token, eid) => {
                     FROM users u, event e
                     WHERE u.token = ?
                     AND e.eventID = ${eid}`, [token], (err, results) => {
-            if(err) {
+            if (err) {
                 return reject(err);
             }
             return resolve(results);
         });
-    
+
     });
 };
 

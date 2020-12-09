@@ -225,6 +225,28 @@ router.post('/attend', async (req, res) => {
     }
 });
 
+router.post('/deleteattendant', async (req, res) => {
+    try {
+        // check for valid token
+        table_name = 'superadmin';
+        let db_user = await db.one(table_name, "token", req.body.token);
+        if (db_user == undefined) {
+            table_name = 'users';
+            db_user = await db.one(table_name, "token", req.body.token);
+            if (db_user == undefined) {
+                res.json({ status: `wrong token` });
+                return
+            }
+        }
+
+        let delete_attendant = await db.delete_attendant(db_user.userID, req.body.eventID);
+        res.json({status:"success"});
+    } catch (e) {
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+
 router.get('/authlevel', async (req, res) => {
     // check for valid token
     table_name = 'superadmin';
