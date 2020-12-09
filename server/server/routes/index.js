@@ -172,38 +172,29 @@ router.get('/getuser', async (req, res) => {
 
 router.post('/events', async (req, res) => {
     let allEvents = await db.allEvents();
-    if(allEvents == undefined) {
-        window.alert("It's empty here.");
-    }
+    res.json(allEvents);
 });
 
 router.post('/myevents', async (req, res) => {
     let myEvents = await db.event_Admin(req.body.token);
-    if(myEvents == undefined) {
-        window.alert("It's empty here, make some events!");
-    }
+    res.json(myEvents)
 });
 
 router.post('/attend', async (req, res) => {
     let attending = await db.user_attend(req.body.token);
-    if(attending == undefined) {
-        window.alert("It's empty here, join some events!");
-    }
+    res.json(attending);
 });
 
 router.post('/authlevel', async (req, rest) => {
     let sup = await db.check_superAdmin(req.body.token);
     if(sup == undefined) {
         let adm = await db.check_Admin(req.body.token);
-        if(adm == undefined) {
-            window.alert("user");
-        }
-        else {
-            window.alert("admin");
+        if(adm != undefined) {
+            res.json(adm);
         }
     }
     else {
-        window.alert("superadmin");
+       res.json(sup);
     }
 });
 
