@@ -5,7 +5,7 @@ Vue.component('event-card', {
         '          <div class="card-body">\n' +
         '            <h5 class="card-title">{{title}} </h5>\n' +
         '            <p class="card-text">Start Date: {{start_text}} </p>\n' +
-        '            <p class="card-text">End Date:{{end_text}} </p>\n' +
+        '            <p class="card-text">End Date: {{end_text}} </p>\n' +
         '            <p class="card-text">Description: <br/>{{description}}</p>\n' +
         '            <a :id="eventID" onclick="handleRegister(this.id)" class="btn btn-primary">{{subscribed}}</a>\n' +
         '          </div>\n' +
