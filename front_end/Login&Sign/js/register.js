@@ -32,7 +32,7 @@ const submitForm = (event) => {
         alert('user created successfully');
         window.localStorage.setItem('token', res.token);
         window.location.href = "./Exhibition%20Center/index.html";
-
+        return true;
       } else if (res.status === "invalid username") {
         console.log("error", res.status);
         return false;

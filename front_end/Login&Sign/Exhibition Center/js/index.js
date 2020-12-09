@@ -1,22 +1,17 @@
 Vue.component('event-card', {
-    props: ['eventID', 'title', 'description', 'url',  'start-date', 'end-date'],
+    props: ['eventID', 'title', 'description', 'url',  'start-date', 'end-date', 'subscribed'],
     template: '<div class="card col-lg-3 exhibition-col" style="width: 18px">\n' +
         '          <img src="http://www.fedracongressi.com/fedra/wp-content/uploads/2016/02/revelry-event-designers-homepage-slideshow-38.jpeg" class="card-img-top" alt="...">\n' +
         '          <div class="card-body">\n' +
         '            <h5 class="card-title">{{title}} </h5>\n' +
         '            <p class="card-text">{{description}}</p>\n' +
-        '            <a onclick="this.rsvp()" class="btn btn-primary">Register</a>\n' +
+        '            <a :id="eventID" onclick="rsvp(this.id)" class="btn btn-primary">{{subscribed}}</a>\n' +
         '          </div>\n' +
-        '        </div>',
-    methods: {
-        rsvp() {
-            console.log(this.eventID);
-            rsvp(this.eventID)
-        }
-    }
+        '        </div>'
+
 });
 Vue.component('event-list', {
-   props:['active_events'],
+   props:['active_events', 'registered_events'],
    template: '<div class="row">\n' +
        '\t\t\t\t<event-card\n' +
        '\t\t\t\t\t\tv-for="item in active_events"\n' +
@@ -24,8 +19,14 @@ Vue.component('event-list', {
        '\t\t\t\t\t\tv-bind:title="item.event_Name"\n' +
        '\t\t\t\t\t\tv-bind:description="item.description"\n' +
        '\t\t\t\t\t\tv-bind:url="item.url"\n' +
+       '\t\t\t\t\t\tv-bind:subscribed="registered_events.includes(item) ? \'Un-Register\' : \'Register\'"\n' +
        '\t\t\t\t\t\tv-bind:eventID="item.eventID"/>\n' +
-       '\t\t\t</div>'
+       '\t\t\t</div>',
+    methods: {
+        rsvp(eventID) {
+            rsvp(eventID);
+        }
+    }
 });
 let eventGroups = new Vue({
     el: "#eventGroups",
@@ -33,7 +34,8 @@ let eventGroups = new Vue({
         events:[],
         active_events:[],
         created_events:[],
-        registered_events:[]
+        registered_events:[],
+        selected:"active"
     },
     created: function () {
         let url = "http://localhost:8080";
@@ -90,7 +92,8 @@ let eventGroups = new Vue({
                             .then((res) => res.json())
                             .then((res) => {
                                 if (res.status === "success") {
-                                    this.registered_events = res.attending;
+                                    this.registered_events = [...new Set(res.attending)];
+                                    console.log(this.registered_events);
                                 } else if (res.status === "wrong token") {
                                     console.log("error", res.status);
                                 }
@@ -137,39 +140,33 @@ function updateDates(event) {
 document.getElementById("date_selection").addEventListener("submit", updateDates);
 
 function showCreated() {
-    let created = document.getElementById("created_events");
-    let active = document.getElementById("active_events");
-    let registered = document.getElementById("registered_events");
-
-    console.log(active);
-
-    created.className = 'current_events';
-    active.className = 'events';
-    registered.className = 'events';
+    eventGroups.selected = "created";
+    document.getElementById("active").style.textDecoration= 'none';
+    document.getElementById("created").style.textDecoration= 'underline';
+    document.getElementById("registered").style.textDecoration= 'none';
 }
 
 function showActive() {
-    let created = document.getElementById("created_events");
-    let active = document.getElementById("active_events");
-    let registered = document.getElementById("registered_events");
-
-    created.className = 'events';
-    active.className = 'current_events';
-    registered.className = 'events';
+    eventGroups.selected = "active";
+    document.getElementById("active").style.textDecoration= 'underline';
+    document.getElementById("created").style.textDecoration= 'none';
+    document.getElementById("registered").style.textDecoration= 'none';
 }
 
 function showRegistered() {
-    let created = document.getElementById("created_events");
-    let active = document.getElementById("active_events");
-    let registered = document.getElementById("registered_events");
-
-    created.className = 'events';
-    active.className = 'events';
-    registered.className = 'current_events';
+    eventGroups.selected = "registered";
+    document.getElementById("active").style.textDecoration= 'none';
+    document.getElementById("created").style.textDecoration= 'none';
+    document.getElementById("registered").style.textDecoration= 'underline';
 }
 
 function rsvp(eventID) {
     console.log(eventID);
+    let newEvent = eventGroups.events.filter((ev)=>{
+        return ev.eventID.toString() === eventID;
+    });
+    if (eventGroups.registered_events.includes(newEvent))
+        return;
     let url = "http://localhost:8080";
     let options = {
         method: "POST",
@@ -186,6 +183,13 @@ function rsvp(eventID) {
         .then((res) => {
             if (res.status === "success") {
                 console.log(res.going);
+                console.log(eventGroups.events);
+                console.log(eventID);
+
+                console.log(newEvent);
+                if (!eventGroups.registered_events.includes(newEvent)) {
+                    Vue.set(eventGroups.registered_events, eventGroups.registered_events.length, newEvent);
+                }
             } else if (res.status === "wrong token") {
                 console.log("error", res.status);
             }
