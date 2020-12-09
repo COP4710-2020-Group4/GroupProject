@@ -7,7 +7,7 @@ function create_token() {
     return token;
 }
 
-function token_valid(sent_token, db_token) {
+function token_valid(sent_token) {
     let token_len = sent_token.length;
     let date = get_date();
     let user_num = sent_token.substr(0, token_len - 10);
@@ -16,9 +16,7 @@ function token_valid(sent_token, db_token) {
         "num": false,
         "date": false
     }
-    if (Number(db_token.substr(0, token_len - 10)) == Number(user_num)) {
-        is_valid.num = true;
-    }
+
 
     if (Number(user_date.substr(0, 4)) == Number(date.substr(0, 4))) { // year
         if (Number(user_date.substr(4, 2)) == Number(date.substr(4, 2))) { // month

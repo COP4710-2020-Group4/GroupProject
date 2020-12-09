@@ -150,7 +150,8 @@ router.get('/getuser', async (req, res) => {
         if (db_user == undefined) {
             table_name = 'users';
             db_user = await db.one(table_name, "token", req.body.token);
-            if (db_user == undefined) {
+            if (db_user == undefined || token_handler.token_valid(req.body.token)) {
+
                 res.json({ status: `wrong token` });
                 return
             }
@@ -187,14 +188,14 @@ router.post('/attend', async (req, res) => {
 
 router.post('/authlevel', async (req, rest) => {
     let sup = await db.check_superAdmin(req.body.token);
-    if(sup == undefined) {
+    if (sup == undefined) {
         let adm = await db.check_Admin(req.body.token);
-        if(adm != undefined) {
+        if (adm != undefined) {
             res.json(adm);
         }
     }
     else {
-       res.json(sup);
+        res.json(sup);
     }
 });
 
