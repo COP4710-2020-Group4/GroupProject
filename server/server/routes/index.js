@@ -181,7 +181,7 @@ router.get('/events', async (req, res) => {
     }
 });
 
-router.get('/myevents', async (req, res) => {
+router.post('/myevents', async (req, res) => {
     try {
         // check for valid token
         table_name = 'superadmin';
@@ -196,14 +196,14 @@ router.get('/myevents', async (req, res) => {
         }
 
         let myEvents = await db.event_Admin(req.body.token);
-        res.json(myEvents)
+        res.json({status:'success', events:myEvents})
     } catch (e) {
         console.log(e);
         res.sendStatus(500);
     }
 });
 
-router.get('/attend', async (req, res) => {
+router.post('/attend', async (req, res) => {
     try {
         // check for valid token
         table_name = 'superadmin';
@@ -218,7 +218,7 @@ router.get('/attend', async (req, res) => {
         }
 
         let attending = await db.user_attend(db_user.userID);
-        res.json(attending);
+        res.json({status:"success", attending:attending});
     } catch (e) {
         console.log(e);
         res.sendStatus(500);
@@ -267,7 +267,7 @@ router.post('/rsvp', async(req, res) => {
         }
 
         let going = await db.isRSVP(req.body.token, req.body.eventID);
-        res.json(going);
+        res.json({status:'success', going:going});
     } catch(e) {
         console.log(e);
         res.sendStatus(500);

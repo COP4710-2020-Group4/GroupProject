@@ -109,7 +109,7 @@ projectdb.update_to_admin = (id) => {
 
 projectdb.allEvents = () => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT event_Name 
+        pool.query(`SELECT * 
                     FROM event`, (err, results) => {
             if (err) {
                 return reject(err);

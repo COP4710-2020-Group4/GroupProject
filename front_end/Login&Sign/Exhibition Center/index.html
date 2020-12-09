@@ -26,9 +26,6 @@
 						<a class="nav-link" href="#">Exhibtions <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link" href="#">Contacts</a>
-					</li>
-					<li class="nav-item active">
 						<a class="nav-link" href="./createEvent.html">Create Event</a>
 					</li>
 					<li class="nav-item dropdown">
@@ -66,26 +63,33 @@
 	<!-- Exhibtions Section -->
 	<div id="middle-section">
 		<h2 class="exhibitions-header">Exhibitions</h2>
-		<div class="navbar-container" id="eventGroups">
+		<div class="navbar-container">
 			<ul>
-				<li class="nav-link active-link">
-					<h3> <a href="#">Created Events </a></h3>
+				<li class="nav-link">
+					<h3><a onclick="showActive()">Active Events</a></h3>
 					<div class="underline"></div>
-					<event-list v-bind:active_events="created_events"/>
 				</li>
 				<li class="nav-link">
-					<h3><a href="#">Active Events</a></h3>
+					<h3> <a onclick="showCreated()">Created Events </a></h3>
 					<div class="underline"></div>
-					<form id="date_selection">
-						<label for="start_date">Event Start Date:</label>
-						<input type="date" id="start_date"/>
-						<label for="end_date">Event End Date:</label>
-						<input type="date" id="end_date"/>
-						<input type="submit" id="date_button" value="Filter" />
-					</form>
-					<event-list v-bind:active_events="active_events"/>
+				</li>
+				<li class="nav-link">
+					<h3><a onclick="showRegistered()">Registered Events</a></h3>
+					<div class="underline"></div>
 				</li>
 			</ul>
+		</div>
+		<div class="container-fluid" style="padding-left:100px;" id="eventGroups">
+			<form id="date_selection">
+				<label for="start_date">Event Start Date:</label>
+				<input type="date" id="start_date"/>
+				<label for="end_date">Event End Date:</label>
+				<input type="date" id="end_date"/>
+				<input type="submit" id="date_button" value="Filter" />
+			</form>
+			<event-list class="current_events" id="active_events" :active_events="active_events"/>
+<!--			<event-list class="events" id="created_events" :active_events="created_events"/>-->
+<!--			<event-list class="events" id="registered_events" :active_events="registered_events"/>-->
 		</div>
 	</div>
 
@@ -134,14 +138,6 @@
 						<li class="list-inline-item"><a href="https://www.ucf.edu/" target="_blank"><i class="fa fa-envelope"></i></a></li>
 					</ul>
 				</div>
-				<hr>
-			</div>
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
-					<p><u><a href="https://www.orlando.gov/Home">Orlando Public Communication Corporation</a></u> is a Registered MSP/ISO of Elavon, Inc. Florida [a wholly owned subsidiary of U.S. Bancorp, Miami, Fl]</p>
-					<p class="h6">© All Right Reserved.<a class="text-green ml-2" href="https://visitcentralflorida.org/" target="_blank">Central Florida</a></p>
-				</div>
-				<hr>
 			</div>
 		</div>
 	</section>

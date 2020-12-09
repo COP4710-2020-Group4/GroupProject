@@ -69,6 +69,14 @@ body
 {
   padding: 75px;
 }
+.current_events
+{
+	display: block;
+}
+/*.events*/
+/*{*/
+/*	display:none;*/
+/*}*/
 a {
 	outline: none;
 }
